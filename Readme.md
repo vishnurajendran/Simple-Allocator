@@ -22,7 +22,7 @@ I’ve always been curious about how engines avoid pointer chaos when objects mo
 
 Typical usage in C++ looks like this:
 
-```
+```c++
 T* obj = new T();
 ```
 
@@ -49,7 +49,7 @@ The allocator manages a **large memory blob** internally.
 
 Objects are constructed directly inside the blob using **placement new**.
 
-```
+```c++
 auto instance = new (addr) T();
 ```
 
@@ -63,7 +63,7 @@ Each allocation returns a `RefHandle` which stores:
 
 To access the object:
 
-```
+```c++
 handle.GetSafe<T>()
 ```
 
@@ -83,7 +83,7 @@ Handles store a `char**` instead of a `char*`.
 
 So when memory expands:
 
-```
+```c++
 MemoryBlob = realloc(...)
 *MemoryBasePointer = MemoryBlob
 ```
@@ -114,13 +114,13 @@ Memory is returned to the allocator
 
 Handles remember the type of the stored object.
 
-```
+```c++
 handle.GetSafe<T>()
 ```
 
 Internally it checks:
 
-```
+```c++
 assert(typeid(T) == StoredDatatype);
 ```
 
@@ -140,7 +140,7 @@ When the allocator is destroyed, it notifies all handles so they invalidate them
 
 The allocator supports simple growth strategies:
 
-```
+```c++
 Strategy::NO_EXPAND
 Strategy::EXPAND_50
 Strategy::EXPAND_100
@@ -148,7 +148,7 @@ Strategy::EXPAND_100
 
 Example:
 
-```
+```c++
 Allocator allocator(Strategy::EXPAND_50);
 ```
 
@@ -156,7 +156,7 @@ Allocator allocator(Strategy::EXPAND_50);
 
 # Example
 
-```
+```c++
 #include "Allocator/Allocator.h"
 
 int main()
@@ -175,7 +175,7 @@ int main()
 ```
 ---
 
-# Limitations (For Now)
+# Limitations
 
 This was mostly an experiment, so a few things are intentionally missing:
 
